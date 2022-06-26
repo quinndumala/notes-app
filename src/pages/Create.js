@@ -21,6 +21,12 @@ const styles = {
     marginTop: "20px",
     marginBottom: "20px",
     display: "block"
+  },
+  button: {
+    marginTop: "20px",
+    marginBottom: "20px",
+    display: "flex",
+    width: "120px"
   }
 };
 
@@ -86,11 +92,13 @@ export default function Create() {
           required
           error={detailsError}
         />
-        <FormControl sx={styles.field}>
+
+        <FormControl>
           <Categories categoryProps={{ category, handleSetCategory }} />
         </FormControl>
 
         <Button
+          sx={styles.button}
           type="submit"
           color="primary"
           variant="contained"

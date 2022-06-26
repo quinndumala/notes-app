@@ -3,12 +3,21 @@ import PropTypes from "prop-types";
 import { FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 export default function Categories({ categoryProps }) {
+  const styles = {
+    formControl: {
+      margin: 0,
+      padding: 0,
+      display: "flex",
+      wrap: "nowrap"
+    }
+  };
+
   const { category, handleSetCategory } = categoryProps;
 
   return (
     <>
       <FormLabel disabled>Note Category</FormLabel>
-      <RadioGroup value={category}>
+      <RadioGroup value={category} sx={styles.formControl}>
         <FormControlLabel
           onChange={(e) => handleSetCategory(e.target.value)}
           value="todos"
