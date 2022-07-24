@@ -7,11 +7,15 @@ const {
   deleteNote,
   editNote
 } = require("./APIs/notes");
+const { loginUser } = require("./APIs/users");
 
 app.get("/notes", getAllNotes);
 app.post("/addNote", createNewNote);
 app.delete("/deleteNote/:noteId", deleteNote);
 app.put("/updateNote/:noteId", editNote);
+
+app.post("/login", loginUser);
+
 exports.api = functions.https.onRequest(app);
 
 // Create and Deploy Your First Cloud Functions
