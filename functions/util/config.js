@@ -1,5 +1,4 @@
 module.exports = {
-  apiKey: "AIzaSyDJFEc7leRAv5JabN8_yHeBrpkhdXFwkT0",
   authDomain: "notes-app-3b981.firebaseapp.com",
   projectId: "notes-app-3b981",
   storageBucket: "notes-app-3b981.appspot.com",
