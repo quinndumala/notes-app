@@ -30,7 +30,7 @@ exports.loginUser = (request, response) => {
       console.error(error);
       return response
         .status(403)
-        .json({ general: "wrong credentials, please try again" });
+        .json({ general: "Wrong credentials, please try again." });
     });
 };
 
@@ -160,4 +160,35 @@ exports.uploadProfilePhoto = (request, response) => {
       });
   });
   busboy.end(request.rawBody);
+};
+
+exports.getUserDetail = (request, response) => {
+  let userData = {};
+  db.doc(`/users/${request.user.username}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userData.userCredentials = doc.data();
+        return response.json(userData);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      return response.status(500).json({ error: error.code });
+    });
+};
+
+exports.updateUserDetails = (request, response) => {
+  let document = db.collection("users").doc(`${request.user.username}`);
+  document
+    .update(request.body)
+    .then(() => {
+      response.json({ message: "User details updated successfully!" });
+    })
+    .catch((error) => {
+      console.error(error);
+      return response.status(500).json({
+        message: "Something went wrong. Update failed."
+      });
+    });
 };

@@ -16,9 +16,23 @@ exports.getAllNotes = (request, response) => {
       });
       return response.json(notes);
     })
-    .catch((err) => {
-      console.error(err);
-      return response.status(500).json({ error: err.code });
+    .catch((error) => {
+      console.error(error);
+      return response.status(500).json({ error: error.code });
+    });
+};
+
+exports.getNote = (request, response) => {
+  db.doc(`notes/${request.params.noteId}`)
+    .get()
+    .then((data) => {
+      return response.json(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      return response
+        .status(500)
+        .json({ message: "Something went wrong. Could not find record." });
     });
 };
 
@@ -44,9 +58,9 @@ exports.createNewNote = (request, response) => {
       responseNewNote.id = doc.id;
       return response.json(responseNewNote);
     })
-    .catch((err) => {
+    .catch((error) => {
       response.status(500).json({ error: "Something went wrong." });
-      console.error(err);
+      console.error(error);
     });
 };
 
@@ -64,11 +78,11 @@ exports.deleteNote = (request, response) => {
     .then(() => {
       response.json({ message: "Successfully Deleted!" });
     })
-    .catch((err) => {
-      console.error(err);
+    .catch((error) => {
+      console.error(error);
       return response
         .status(500)
-        .json({ error: `Something went wrong: ${err.code}` });
+        .json({ error: `Something went wrong: ${error.code}` });
     });
 };
 
@@ -84,10 +98,10 @@ exports.editNote = (request, response) => {
     .then(() => {
       response.json({ message: "Successfully Updated" });
     })
-    .catch((err) => {
-      console.error(err);
+    .catch((error) => {
+      console.error(error);
       return response
         .status(500)
-        .json({ error: `Something went wrong: ${err.code}` });
+        .json({ error: `Something went wrong: ${error.code}` });
     });
 };
