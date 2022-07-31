@@ -7,7 +7,8 @@ const {
   deleteNote,
   editNote
 } = require("./APIs/notes");
-const { loginUser } = require("./APIs/users");
+const { loginUser, signUpUser, uploadProfilePhoto } = require("./APIs/users");
+const auth = require("./util/auth");
 
 app.get("/notes", getAllNotes);
 app.post("/addNote", createNewNote);
@@ -15,6 +16,8 @@ app.delete("/deleteNote/:noteId", deleteNote);
 app.put("/updateNote/:noteId", editNote);
 
 app.post("/login", loginUser);
+app.post("/signup", signUpUser);
+app.post("/user/image", auth, uploadProfilePhoto);
 
 exports.api = functions.https.onRequest(app);
 
