@@ -2,6 +2,7 @@ const { db } = require("../util/admin");
 
 exports.getAllNotes = (request, response) => {
   db.collection("notes")
+    .where("username", "==", request.user.username)
     .orderBy("createdAt", "desc")
     .get()
     .then((data) => {
@@ -48,6 +49,7 @@ exports.createNewNote = (request, response) => {
   const newNote = {
     title: request.body.title,
     body: request.body.body,
+    username: request.user.username,
     createdAt: new Date().toISOString()
   };
 
@@ -72,6 +74,9 @@ exports.deleteNote = (request, response) => {
       if (!doc.exists) {
         console.log("request.params.noteId: ", request.params.noteID);
         return response.status(404).json({ error: "Record not found" });
+      }
+      if (doc.data().username !== request.user.username) {
+        return response.status(403).json({ error: "UnAuthorized" });
       }
       return document.delete();
     })

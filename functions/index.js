@@ -17,11 +17,11 @@ const {
 } = require("./APIs/users");
 const auth = require("./util/auth");
 
-app.get("/notes", getAllNotes);
-app.get("/note/:noteId", getNote);
-app.post("/addNote", createNewNote);
-app.delete("/deleteNote/:noteId", deleteNote);
-app.put("/updateNote/:noteId", editNote);
+app.get("/notes", auth, getAllNotes);
+app.get("/note/:noteId", auth, getNote);
+app.post("/addNote", auth, createNewNote);
+app.delete("/deleteNote/:noteId", auth, deleteNote);
+app.put("/updateNote/:noteId", auth, editNote);
 
 app.post("/login", loginUser);
 app.post("/signup", signUpUser);
