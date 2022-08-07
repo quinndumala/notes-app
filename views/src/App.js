@@ -3,6 +3,7 @@ import Notes from "./pages/Notes";
 import Create from "./pages/Create";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { amber, blueGrey } from "@mui/material/colors";
+import Login from "./pages/Login";
 
 const theme = createTheme({
   palette: {
@@ -23,6 +24,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <Switch>
+          <Route exact path="/login">
+            <Login />
+          </Route>
           <Route exact path="/">
             <Notes />
           </Route>
