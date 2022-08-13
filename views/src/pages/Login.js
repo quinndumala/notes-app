@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useHistory } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -43,11 +44,12 @@ const styles = (theme) => ({
   }
 });
 
-function Login({ history, classes }) {
+function Login({ classes }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   const handleEmailChange = (event) => {
     event.preventDefault();
@@ -76,7 +78,8 @@ function Login({ history, classes }) {
         history.push("/");
       })
       .catch((error) => {
-        setErrors(error.response.data);
+        console.log("Login error: ", error);
+        setErrors(error);
         setLoading(false);
       });
   };
