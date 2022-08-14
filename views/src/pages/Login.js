@@ -1,5 +1,5 @@
 // Material UI components
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -45,20 +45,16 @@ const styles = (theme) => ({
 });
 
 function Login({ classes }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: ""
+  });
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-  const handleEmailChange = (event) => {
-    event.preventDefault();
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    event.preventDefault();
-    setPassword(event.target.value);
+  const handleLoginDataChange = (event) => {
+    setLoginData({ ...loginData, [event.target.name]: event.target.value });
   };
 
   const handleSubmit = (event) => {
@@ -66,8 +62,8 @@ function Login({ classes }) {
     setLoading(true);
 
     const userData = {
-      email: email,
-      password: password
+      email: loginData.email,
+      password: loginData.password
     };
 
     axios
@@ -107,7 +103,7 @@ function Login({ classes }) {
             autoFocus
             helperText={errors.email}
             error={errors.email ? true : false}
-            onChange={handleEmailChange}
+            onChange={handleLoginDataChange}
           />
           <TextField
             variant="outlined"
@@ -121,7 +117,7 @@ function Login({ classes }) {
             autoComplete="current-password"
             helperText={errors.password}
             error={errors.password ? true : false}
-            onChange={handlePasswordChange}
+            onChange={handleLoginDataChange}
           />
           <Button
             type="submit"
@@ -130,7 +126,7 @@ function Login({ classes }) {
             color="primary"
             className={classes.submit}
             onClick={handleSubmit}
-            disabled={loading || !email || !password}>
+            disabled={loading || !loginData.email || !loginData.password}>
             Sign In
             {loading && (
               <CircularProgress size={30} className={classes.progess} />
