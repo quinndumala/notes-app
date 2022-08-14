@@ -38,7 +38,7 @@ const styles = (theme) => ({
 });
 
 function Signup({ classes }) {
-  const [userData, setUserData] = useState({
+  const [signUpData, setSignUpData] = useState({
     firstName: "",
     lastName: "",
     phoneNumber: "",
@@ -52,22 +52,22 @@ function Signup({ classes }) {
   const [loading, setLoading] = useState(false);
   const history = useHistory;
 
-  const handelUserDataChange = (event) => {
-    setUserData({ [event.target.name]: event.target.value });
+  const handleUserDataChange = (event) => {
+    setSignUpData({ ...signUpData, [event.target.name]: event.target.value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setLoading(true);
     const newUserData = {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      phoneNumber: userData.phoneNumber,
-      country: userData.country,
-      username: userData.username,
-      email: userData.email,
-      password: userData.password,
-      confirmPassword: userData.confirmPassword
+      firstName: signUpData.firstName,
+      lastName: signUpData.lastName,
+      phoneNumber: signUpData.phoneNumber,
+      country: signUpData.country,
+      username: signUpData.username,
+      email: signUpData.email,
+      password: signUpData.password,
+      confirmPassword: signUpData.confirmPassword
     };
 
     axios
@@ -106,7 +106,7 @@ function Signup({ classes }) {
                 autoComplete="firstName"
                 helperText={errors.firstName}
                 error={errors.firstName ? true : false}
-                onChange={handelUserDataChange}
+                onChange={handleUserDataChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -120,7 +120,7 @@ function Signup({ classes }) {
                 autoComplete="lastName"
                 helperText={errors.lastName}
                 error={errors.lastName ? true : false}
-                onChange={handelUserDataChange}
+                onChange={handleUserDataChange}
               />
             </Grid>
 
@@ -135,7 +135,7 @@ function Signup({ classes }) {
                 autoComplete="username"
                 helperText={errors.username}
                 error={errors.username ? true : false}
-                onChange={handelUserDataChange}
+                onChange={handleUserDataChange}
               />
             </Grid>
 
@@ -151,7 +151,7 @@ function Signup({ classes }) {
                 pattern="[7-9]{1}[0-9]{9}"
                 helperText={errors.phoneNumber}
                 error={errors.phoneNumber ? true : false}
-                onChange={handelUserDataChange}
+                onChange={handleUserDataChange}
               />
             </Grid>
 
@@ -166,7 +166,7 @@ function Signup({ classes }) {
                 autoComplete="email"
                 helperText={errors.email}
                 error={errors.email ? true : false}
-                onChange={handelUserDataChange}
+                onChange={handleUserDataChange}
               />
             </Grid>
 
@@ -181,7 +181,7 @@ function Signup({ classes }) {
                 autoComplete="country"
                 helperText={errors.country}
                 error={errors.country ? true : false}
-                onChange={handelUserDataChange}
+                onChange={handleUserDataChange}
               />
             </Grid>
 
@@ -197,7 +197,7 @@ function Signup({ classes }) {
                 autoComplete="current-password"
                 helperText={errors.password}
                 error={errors.password ? true : false}
-                onChange={handelUserDataChange}
+                onChange={handleUserDataChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -210,7 +210,7 @@ function Signup({ classes }) {
                 type="password"
                 id="confirmPassword"
                 autoComplete="current-password"
-                onChange={handelUserDataChange}
+                onChange={handleUserDataChange}
               />
             </Grid>
           </Grid>
@@ -223,13 +223,13 @@ function Signup({ classes }) {
             onClick={handleSubmit}
             disabled={
               loading ||
-              !userData.email ||
-              !userData.password ||
-              !userData.firstName ||
-              !userData.lastName ||
-              !userData.country ||
-              !userData.username ||
-              !userData.phoneNumber
+              !signUpData.email ||
+              !signUpData.password ||
+              !signUpData.firstName ||
+              !signUpData.lastName ||
+              !signUpData.country ||
+              !signUpData.username ||
+              !signUpData.phoneNumber
             }>
             Sign Up
             {loading && (
