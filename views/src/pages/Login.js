@@ -12,6 +12,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -82,6 +83,9 @@ function Login({ classes }) {
 
   return (
     <Container component="main" maxWidth="xs">
+      <Helmet>
+        <title>Login</title>
+      </Helmet>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
