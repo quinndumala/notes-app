@@ -13,7 +13,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { Helmet } from "react-helmet";
 
 const styles = (theme) => ({
   paper: {
@@ -86,9 +85,6 @@ function Signup({ classes }) {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Helmet>
-        <title>Sign Up</title>
-      </Helmet>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
