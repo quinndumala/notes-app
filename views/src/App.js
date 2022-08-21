@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { amber, blueGrey } from "@mui/material/colors";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Home from "./pages/Home";
 
 const theme = createTheme({
   palette: {
@@ -28,14 +29,14 @@ function App() {
           <Route exact path="/login">
             <Login />
           </Route>
-          <Route exact path="/">
-            <Notes />
-          </Route>
           <Route path="/create">
             <Create />
           </Route>
           <Route path="/signup">
             <Signup />
+          </Route>
+          <Route path="/">
+            <Home />
           </Route>
         </Switch>
       </Router>

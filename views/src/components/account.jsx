@@ -70,10 +70,11 @@ const styles = (theme) => ({
 });
 
 function Account({ classes }) {
-  const history = useHistory;
+  const history = useHistory();
 
-  const [uiLoading, setUiLoading] = useState(false);
+  const [uiLoading, setUiLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [image, setImage] = useState();
   const [imageError, setImageError] = useState("");
 
   const [userData, setUserData] = useState({
@@ -116,15 +117,225 @@ function Account({ classes }) {
       });
   }, []);
 
-  const handleChange = (event) => {
-    this.setState({
+  const handleUserDataChange = (event) => {
+    setUserData({
+      ...userData,
       [event.target.name]: event.target.value
     });
   };
 
   const handleImageChange = (event) => {
-    this.setState({
-      image: event.target.files[0]
-    });
+    setImage(event.target.files[0]);
   };
+
+  const hanldeProfilePhoto = (event) => {
+    event.preventDefault();
+    setUiLoading(true);
+
+    authMiddleWare(history);
+    const authToken = localStorage.getItem("AuthToken");
+
+    let form_data = new FormData();
+    form_data.append("image", image);
+    //form_data.append('content', this.state.content);
+    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    axios
+      .post("/user/image", form_data, {
+        headers: {
+          "content-type": "multipart/form-data"
+        }
+      })
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          history.push("/login");
+        }
+        console.log(error);
+        setUiLoading(false);
+        setImageError("Error in posting the data");
+      });
+  };
+
+  const updateFormValues = (event) => {
+    event.preventDefault();
+    setButtonLoading(true);
+
+    authMiddleWare(history);
+    const authToken = localStorage.getItem("AuthToken");
+    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    const formRequest = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      country: userData.country
+    };
+    axios
+      .post("/user", formRequest)
+      .then(() => {
+        setButtonLoading(false);
+      })
+      .catch((error) => {
+        if (error.response.status === 403) {
+          history.push("/login");
+        }
+        console.log(error);
+        setButtonLoading(false);
+      });
+  };
+
+  if (uiLoading === true) {
+    return (
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {uiLoading && (
+          <CircularProgress size={150} className={classes.uiProgess} />
+        )}
+      </main>
+    );
+  } else {
+    return (
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <Card className={clsx(classes.root, classes)}>
+          <CardContent>
+            <div className={classes.details}>
+              <div>
+                <Typography
+                  className={classes.locationText}
+                  gutterBottom
+                  variant="h4">
+                  {userData.firstName} {userData.lastName}
+                </Typography>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  type="submit"
+                  size="small"
+                  startIcon={<CloudUploadIcon />}
+                  className={classes.uploadButton}
+                  onClick={hanldeProfilePhoto}>
+                  Upload Photo
+                </Button>
+                <input type="file" onChange={handleImageChange} />
+
+                {imageError ? (
+                  <div className={classes.customError}>
+                    {" "}
+                    Wrong Image Format || Supported Format are PNG and JPG
+                  </div>
+                ) : (
+                  false
+                )}
+              </div>
+            </div>
+            <div className={classes.progress} />
+          </CardContent>
+          <Divider />
+        </Card>
+
+        <br />
+        <Card className={clsx(classes.root, classes)}>
+          <form autoComplete="off" noValidate>
+            <Divider />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="First name"
+                    margin="dense"
+                    name="firstName"
+                    variant="outlined"
+                    value={userData.firstName}
+                    onChange={handleUserDataChange}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Last name"
+                    margin="dense"
+                    name="lastName"
+                    variant="outlined"
+                    value={userData.lastName}
+                    onChange={handleUserDataChange}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    margin="dense"
+                    name="email"
+                    variant="outlined"
+                    disabled={true}
+                    value={userData.email}
+                    onChange={handleUserDataChange}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Phone Number"
+                    margin="dense"
+                    name="phone"
+                    type="number"
+                    variant="outlined"
+                    disabled={true}
+                    value={userData.phoneNumber}
+                    onChange={handleUserDataChange}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="User Name"
+                    margin="dense"
+                    name="userHandle"
+                    disabled={true}
+                    variant="outlined"
+                    value={userData.username}
+                    onChange={handleUserDataChange}
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Country"
+                    margin="dense"
+                    name="country"
+                    variant="outlined"
+                    value={userData.country}
+                    onChange={handleUserDataChange}
+                  />
+                </Grid>
+              </Grid>
+            </CardContent>
+            <Divider />
+            <CardActions />
+          </form>
+        </Card>
+        <Button
+          color="primary"
+          variant="contained"
+          type="submit"
+          className={classes.submitButton}
+          onClick={updateFormValues}
+          disabled={
+            buttonLoading ||
+            !userData.firstName ||
+            !userData.lastName ||
+            !userData.country
+          }>
+          Save details
+          {buttonLoading && (
+            <CircularProgress size={30} className={classes.progess} />
+          )}
+        </Button>
+      </main>
+    );
+  }
 }
+
+export default withStyles(styles)(Account);

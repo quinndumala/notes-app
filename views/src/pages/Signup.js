@@ -51,7 +51,7 @@ function Signup({ classes }) {
   });
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
-  const history = useHistory;
+  const history = useHistory();
 
   const handleUserDataChange = (event) => {
     setSignUpData({ ...signUpData, [event.target.name]: event.target.value });

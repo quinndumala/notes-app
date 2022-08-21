@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 
 import Account from "../components/account";
-import Todo from "../components/todo";
+import Notes from "../components/notes";
 
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -63,10 +63,10 @@ const styles = (theme) => ({
 });
 
 function Home({ classes }) {
-  const history = useHistory;
+  const history = useHistory();
   const [render, setRender] = useState(false);
   const [uiLoading, setUiLoading] = useState(true);
-  const [imageLoading, setImageLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
   const [errors, setErrors] = useState([]);
 
   const [userData, setUserData] = useState({
@@ -79,8 +79,8 @@ function Home({ classes }) {
     setRender(true);
   };
 
-  const loadTodoPage = (event) => {
-    setRender(true);
+  const loadNotesPage = (event) => {
+    setRender(false);
   };
 
   const handleLogout = (event) => {
@@ -109,14 +109,14 @@ function Home({ classes }) {
           history.push("/login");
         }
         console.log(error);
-        setErrors(error);
+        setErrors("Error in posting data.");
       });
   }, []);
 
-  if (uiLoading === true) {
+  if (uiLoading === true || imageLoading === true) {
     return (
       <div className={classes.root}>
-        {uiLoading && (
+        {(uiLoading || imageLoading) && (
           <CircularProgress size={150} className={classes.uiProgess} />
         )}
       </div>
@@ -128,7 +128,7 @@ function Home({ classes }) {
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <Typography variant="h6" noWrap>
-              TodoApp
+              Notes App
             </Typography>
           </Toolbar>
         </AppBar>
@@ -149,12 +149,12 @@ function Home({ classes }) {
           </center>
           <Divider />
           <List>
-            <ListItem button key="Todo" onClick={loadTodoPage}>
+            <ListItem button key="Notes" onClick={loadNotesPage}>
               <ListItemIcon>
                 {" "}
                 <NotesIcon />{" "}
               </ListItemIcon>
-              <ListItemText primary="Todo" />
+              <ListItemText primary="Notes" />
             </ListItem>
 
             <ListItem button key="Account" onClick={loadAccountPage}>
@@ -175,7 +175,7 @@ function Home({ classes }) {
           </List>
         </Drawer>
 
-        <div>{render ? <Account /> : <Todo />}</div>
+        <div>{render ? <Account /> : <Notes />}</div>
       </div>
     );
   }
