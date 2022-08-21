@@ -11,7 +11,7 @@ const styles = (theme) => ({
   toolbar: theme.mixins.toolbar
 });
 
-function Todo({ classes }) {
+function Notes({ classes }) {
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
@@ -20,4 +20,4 @@ function Todo({ classes }) {
   );
 }
 
-export default withStyles(styles)(Todo);
+export default withStyles(styles)(Notes);
