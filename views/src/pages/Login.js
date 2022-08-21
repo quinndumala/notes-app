@@ -12,10 +12,12 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useHistory } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider, HelmetData } from "react-helmet-async";
 
 import PropTypes from "prop-types";
 import axios from "axios";
+
+const helmetData = new HelmetData({});
 
 const styles = (theme) => ({
   paper: {
@@ -83,7 +85,7 @@ function Login({ classes }) {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Helmet>
+      <Helmet helmetData={helmetData}>
         <title>Login</title>
       </Helmet>
       <CssBaseline />
