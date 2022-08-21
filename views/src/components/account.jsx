@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useRef, useState } from "react";
 
 import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
@@ -88,25 +88,31 @@ function Account({ classes }) {
   });
 
   const [errors, setErrors] = useState([]);
+  let isRendered = useRef(false);
 
   useEffect(() => {
+    isRendered = true;
     authMiddleWare(history);
     const authToken = localStorage.getItem("AuthToken");
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
       .get("/user")
       .then((response) => {
-        console.log(response.data);
-        setUserData({
-          firstName: response.data.userCredentials.firstName,
-          lastName: response.data.userCredentials.lastName,
-          email: response.data.userCredentials.email,
-          phoneNumber: response.data.userCredentials.phoneNumber,
-          country: response.data.userCredentials.country,
-          username: response.data.userCredentials.username
-        });
+        if (isRendered) {
+          console.log(response.data);
+          setUserData({
+            firstName: response.data.userCredentials.firstName,
+            lastName: response.data.userCredentials.lastName,
+            email: response.data.userCredentials.email,
+            phoneNumber: response.data.userCredentials.phoneNumber,
+            country: response.data.userCredentials.country,
+            username: response.data.userCredentials.username
+          });
 
-        setUiLoading(false);
+          setUiLoading(false);
+        }
+
+        return;
       })
       .catch((error) => {
         if (error.response.status === 403) {
@@ -115,6 +121,9 @@ function Account({ classes }) {
         console.log(error);
         setErrors(error);
       });
+    return () => {
+      isRendered = false;
+    };
   }, []);
 
   const handleUserDataChange = (event) => {
