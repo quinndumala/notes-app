@@ -23,6 +23,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { authMiddleWare } from "../util/auth";
+import { useHistory } from "react-router-dom";
 
 const styles = (theme) => ({
   content: {
@@ -97,9 +98,97 @@ function Notes({ classes }) {
     title: "",
     body: ""
   });
-  const [noteID, setNoteID] = useState("");
+  const [noteID, setNoteId] = useState("");
   const [errors, setErrors] = useState([]);
   const [open, setOpen] = useState(false);
+  const [uiLoading, setUiLoading] = useState(true);
+  const [buttonType, setButtonType] = useState("");
+  const [viewOpen, setViewOpen] = useState(false);
+
+  const history = useHistory();
+
+  useState(() => {
+    authMiddleWare(history);
+    const authToken = localStorage.getItem("AuthToken");
+    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    axios
+      .get("/notes")
+      .then((response) => {
+        setNotes(response.data);
+        setUiLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const handleDeleteNote = (data) => {
+    authMiddleWare(history);
+    const authToken = localStorage.getItem("AuthToken");
+    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    let noteId = data.note.noteId;
+    axios
+      .delete(`deleteNote/${noteId}`)
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleEditClickOpen = (data) => {
+    setNoteDetails({
+      title: data.note.title,
+      body: data.note.body
+    });
+    setNoteId(data.note.noteId);
+    setButtonType("Edit");
+    setOpen(true);
+  };
+
+  const handleViewOpen = (data) => {
+    setNoteDetails({
+      title: data.note.title,
+      body: data.note.body
+    });
+    setViewOpen(true);
+  };
+
+  const DialogTitle = withStyles(styles)((props) => {
+    const { children, classes, onClose, ...other } = props;
+    return (
+      <MuiDialogTitle disableTypography className={classes.root} {...other}>
+        <Typography variant="h6">{children}</Typography>
+        {onClose ? (
+          <IconButton
+            aria-label="close"
+            className={classes.closeButton}
+            onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </MuiDialogTitle>
+    );
+  });
+
+  const DialogContent = withStyles((theme) => ({
+    viewRoot: {
+      padding: theme.spacing(2)
+    }
+  }))(MuiDialogContent);
+
+  dayjs.extend(relativeTime);
+
+  const handleClickOpen = () => {
+    setNoteId("");
+    setNoteDetails({
+      title: "",
+      body: ""
+    });
+    setButtonType("");
+    setOpen(true);
+  };
 
   return (
     <main className={classes.content}>
