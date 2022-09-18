@@ -1,9 +1,9 @@
 import React, { Component, useState } from "react";
 
 import withStyles from "@material-ui/core/styles/withStyles";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
+import Dialog from "@mui/material/Dialog";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -17,7 +17,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CardContent from "@material-ui/core/CardContent";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import MuiDialogContent from "@material-ui/core/DialogContent";
+import DialogContent from "@mui/material/DialogContent";
 
 import axios from "axios";
 import dayjs from "dayjs";
@@ -75,7 +75,7 @@ const styles = (theme) => ({
     left: "50%",
     top: "35%"
   },
-  dialogeStyle: {
+  dialogStyle: {
     maxWidth: "50%"
   },
   viewRoot: {
@@ -182,12 +182,6 @@ function Notes({ classes }) {
     );
   });
 
-  const DialogContent = withStyles((theme) => ({
-    viewRoot: {
-      padding: theme.spacing(2)
-    }
-  }))(MuiDialogContent);
-
   dayjs.extend(relativeTime);
 
   const handleClickOpen = () => {
@@ -209,8 +203,9 @@ function Notes({ classes }) {
     };
     let options = {};
     if (buttonType === "Edit") {
+      console.log("buttonType === Edit");
       options = {
-        url: `/note/${noteId}`,
+        url: `/updateNote/${noteId}`,
         method: "put",
         data: userNote
       };
@@ -260,7 +255,7 @@ function Notes({ classes }) {
         <IconButton
           className={classes.floatingButton}
           color="primary"
-          aria-label="Add Todo"
+          aria-label="Add Note"
           onClick={handleClickOpen}>
           <AddCircleIcon style={{ fontSize: 60 }} />
         </IconButton>
@@ -280,7 +275,7 @@ function Notes({ classes }) {
                 <CloseIcon />
               </IconButton>
               <Typography variant="h6" className={classes.title}>
-                {buttonType === "Edit" ? "Edit Todo" : "Create a new Note"}
+                {buttonType === "Edit" ? "Edit Note" : "Create a new Note"}
               </Typography>
               <Button
                 autoFocus
@@ -334,8 +329,8 @@ function Notes({ classes }) {
         </Dialog>
 
         <Grid container spacing={2}>
-          {notes.map((note) => (
-            <Grid item xs={12} sm={6}>
+          {notes.map((note, i) => (
+            <Grid key={i} item xs={12} sm={6}>
               <Card className={classes.root} variant="outlined">
                 <CardContent>
                   <Typography variant="h5" component="h2">
@@ -379,19 +374,19 @@ function Notes({ classes }) {
           aria-labelledby="customized-dialog-title"
           open={viewOpen}
           fullWidth
-          classes={{ paperFullWidth: classes.dialogeStyle }}>
+          classes={{ paperFullWidth: classes.dialogStyle }}>
           <DialogTitle id="customized-dialog-title" onClose={handleViewClose}>
             {noteDetails.title}
           </DialogTitle>
-          <DialogContent dividers>
+          <DialogContent className={classes.viewRoot} dividers>
             <TextField
               fullWidth
-              id="todoDetails"
+              id="noteDetails"
               name="body"
               multiline
-              readonly
-              rows={1}
-              rowsMax={25}
+              readOnly
+              minRows={1}
+              maxRows={25}
               value={noteDetails.body}
               InputProps={{
                 disableUnderline: true
