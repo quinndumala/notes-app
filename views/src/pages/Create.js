@@ -35,7 +35,7 @@ export default function Create() {
   const [details, setDetails] = useState("");
   const [titleError, setTitleError] = useState(false);
   const [detailsError, setDetailsError] = useState(false);
-  const [category, setCategory] = useState("todos");
+  const [category, setCategory] = useState("notes");
 
   const clearTextFieldErrors = () => {
     setTitleError(false);
@@ -87,7 +87,7 @@ export default function Create() {
           color="secondary"
           label="Details"
           multiline
-          rows={4}
+          maxRows={4}
           fullWidth
           required
           error={detailsError}
